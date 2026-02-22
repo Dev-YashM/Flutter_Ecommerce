@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<dynamic> coolers = [];
   bool isLoading = true;
 
-  final String baseUrl = "http://10.18.46.128:8080/api";
+  final String baseUrl = "http://10.141.126.128:8080/api";
 
   @override
   void initState() {

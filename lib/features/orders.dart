@@ -28,7 +28,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
     try {
       final response = await http.get(
         Uri.parse(
-          "http://10.18.46.128:8080/api/bookings/user/$mobileNumber",
+          "http://10.141.126.128:8080/api/bookings/user/$mobileNumber",
         ),
       );
 
@@ -70,96 +70,118 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
           : ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: orders.length,
-        itemBuilder: (context, index) {
+          itemBuilder: (context, index) {
+            final order = orders[index];
 
-          final order = orders[index];
+            // Determine card color and status text based on paymentStatus
+            Color cardColor = Colors.white;
+            String paymentText = "";
 
-          return Card(
-            margin: const EdgeInsets.only(bottom: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment:
-                CrossAxisAlignment.start,
-                children: [
+            if (order["paymentStatus"] == "CREATED") {
+              cardColor = Colors.yellow.shade100;
+              paymentText = "Payment Not Done";
+            } else if (order["paymentStatus"] == "FAILED") {
+              cardColor = Colors.red.shade100;
+              paymentText = "Payment Failed";
+            } else {
+              cardColor = Colors.green.shade50;
+              paymentText = "Payment Successful";
+            }
 
-                  /// 🔥 Title
-                  Text(
-                    order["coolerTitle"],
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color:
-                      theme.colorScheme.primary,
-                    ),
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  /// Rental Duration
-                  Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("Duration"),
-                      Text(order["rentalDuration"]),
-                    ],
-                  ),
-
-                  const SizedBox(height: 6),
-
-                  /// Price
-                  Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("Price"),
-                      Text(
-                        "₹${order["price"]}",
-                        style: const TextStyle(
-                          fontWeight:
-                          FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 6),
-
-                  /// Booked Date
-                  Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("Booked At"),
-                      Text(
-                        order["bookedAt"]
-                            .toString()
-                            .substring(0, 10),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 6),
-
-                  Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("Order Status"),
-                      Text(
-                        order["orderStatus"]
-                      ),
-                    ],
-                  ),
-                ],
+            return Card(
+              color: cardColor,
+              margin: const EdgeInsets.only(bottom: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
               ),
-            ),
-          );
-        },
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    /// 🔥 Title
+                    Text(
+                      order["coolerTitle"],
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    /// Rental Duration
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Duration"),
+                        Text(order["rentalDuration"]),
+                      ],
+                    ),
+
+                    const SizedBox(height: 6),
+
+                    /// Price
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Price"),
+                        Text(
+                          "₹${order["price"]}",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 6),
+
+                    /// Booked Date
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Booked At"),
+                        Text(order["bookedAt"].toString().substring(0, 10)),
+                      ],
+                    ),
+
+                    const SizedBox(height: 6),
+
+                    /// Order Status
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Order Status"),
+                        Text(order["orderStatus"]),
+                      ],
+                    ),
+
+                    const SizedBox(height: 6),
+
+                    /// Payment Status
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Payment Status"),
+                        Text(
+                          paymentText,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: order["paymentStatus"] == "FAILED"
+                                ? Colors.red
+                                : (order["paymentStatus"] == "CREATED"
+                                ? Colors.orange
+                                : Colors.green),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
       ),
     );
   }

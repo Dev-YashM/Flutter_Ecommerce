@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:mahalaxmi_coolers/services/cartService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,15 +15,36 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
 
   List<Map<String, dynamic>> cartItems = [];
-  bool isPlacingOrder = false;
+  late Razorpay _razorpay;
 
-  final String bookingUrl =
-      "http://10.18.46.128:8080/api/bookings/create";
+  final String baseUrl = "http://10.141.126.128:8080/api";
+
+  String mobileNumber = "";
+  String currentBookingId = "";
 
   @override
   void initState() {
     super.initState();
     loadCart();
+    loadMobileNumber();
+
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handleExternalWallet);
+  }
+
+  @override
+  void dispose() {
+    _razorpay.clear();
+    super.dispose();
+  }
+
+  Future<void> loadMobileNumber() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      mobileNumber = prefs.getString("mobileNumber") ?? "";
+    });
   }
 
   Future<void> loadCart() async {
@@ -40,65 +62,143 @@ class _CartScreenState extends State<CartScreen> {
     return sum;
   }
 
-  /// 🔥 ORDER API CALL
-  Future<void> placeOrder() async {
-    if (cartItems.isEmpty) return;
+  /// STEP 1 - Create Booking
+  Future<String?> createBooking(Map<String, dynamic> item) async {
 
-    setState(() {
-      isPlacingOrder = true;
-    });
+    final response = await http.post(
+      Uri.parse("$baseUrl/bookings/create"),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "mobile": mobileNumber,
+        "coolerTitle": item["title"],
+        "rentalDuration": item["duration"],
+        "price": item["price"],
+      }),
+    );
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? mobileNumber = prefs.getString("mobileNumber");
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final data = jsonDecode(response.body);
+      return data["id"];
+    }
 
-    try {
-      for (var item in cartItems) {
-        final response = await http.post(
-          Uri.parse(bookingUrl),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: jsonEncode({
-            "mobile": mobileNumber, // You can replace with logged user mobile
-            "coolerTitle": item["title"],
-            "rentalDuration": item["duration"],
-            "price": item["price"],
-          }),
-        );
+    return null;
+  }
 
-        if (response.statusCode != 200 &&
-            response.statusCode != 201) {
-          throw Exception("Order Failed");
-        }
+  /// STEP 2 - Create Razorpay Order (FIXED URL)
+  Future<Map<String, dynamic>?> createRazorpayOrder(String bookingId) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/payment/create-order/$bookingId"),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return jsonDecode(response.body);
+    }
+
+    return null;
+  }
+
+  /// STEP 3 - Open Razorpay
+  void openRazorpay(String razorpayOrderId, int price) {
+    var options = {
+      'key': 'rzp_test_SJC89k7q16xRy1',
+      'amount': price * 100,
+      'order_id': razorpayOrderId,
+      'name': 'Mahalaxmi Rentals',
+      'prefill': {
+        'contact': mobileNumber,
       }
+    };
 
+    _razorpay.open(options);
+  }
+
+  /// STEP 4 - Verify Payment (FIXED TO USE REQUEST PARAMS)
+  Future<void> verifyPayment(
+      String bookingId,
+      String paymentId,
+      String signature) async {
+
+    final response = await http.post(
+      Uri.parse(
+          "$baseUrl/payment/verify/$bookingId?paymentId=$paymentId&signature=$signature"),
+    );
+
+    final data = jsonDecode(response.body);
+
+    if (data["paymentStatus"] == "SUCCESS") {
       await CartService.clearCart();
       await loadCart();
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Order placed successfully"),
+          content: Text("Payment Successful 🎉"),
           backgroundColor: Colors.green,
         ),
       );
-
-    } catch (e) {
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Failed to place order"),
+          content: Text("Payment Verification Failed"),
           backgroundColor: Colors.red,
         ),
       );
     }
+  }
 
-    setState(() {
-      isPlacingOrder = false;
-    });
+  void handlePaymentSuccess(PaymentSuccessResponse response) {
+    if (currentBookingId.isEmpty) return;
+
+    verifyPayment(
+      currentBookingId,
+      response.paymentId ?? "",
+      response.signature ?? "",
+    );
+  }
+
+  void handlePaymentError(PaymentFailureResponse response) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Payment Failed ❌"),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
+  void handleExternalWallet(ExternalWalletResponse response) {}
+
+  /// MAIN ORDER FLOW
+  Future<void> startPaymentFlow() async {
+
+    if (cartItems.isEmpty || mobileNumber.isEmpty) {
+      return;
+    }
+
+    final item = cartItems.first;
+
+    final bookingId = await createBooking(item);
+
+    if (bookingId == null) {
+      print("Booking creation failed");
+      return;
+    }
+
+    currentBookingId = bookingId;
+
+    final razorpayData = await createRazorpayOrder(bookingId);
+
+    if (razorpayData == null) {
+      print("Razorpay order failed");
+      return;
+    }
+
+    openRazorpay(
+      razorpayData["razorpayOrderId"],
+      razorpayData["price"],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -124,24 +224,33 @@ class _CartScreenState extends State<CartScreen> {
                 return Card(
                   margin: const EdgeInsets.only(bottom: 12),
                   child: ListTile(
-                    leading: item["image"] != ""
-                        ? Image.network(
-                      item["image"],
-                      width: 60,
-                      fit: BoxFit.cover,
-                    )
-                        : const Icon(Icons.image),
-
                     title: Text(item["title"]),
-
-                    subtitle: Text(
-                        "${item["duration"]} • ₹${item["price"]}"),
-
+                    subtitle: Text("${item["duration"]} • ₹${item["price"]}"),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: () async {
-                        await CartService.removeItem(index);
-                        loadCart();
+                        final confirm = await showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            title: const Text("Remove Item"),
+                            content: const Text("Are you sure you want to remove this item?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                child: const Text("Cancel"),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, true),
+                                child: const Text("Remove"),
+                              ),
+                            ],
+                          ),
+                        );
+
+                        if (confirm == true) {
+                          await CartService.removeItem(index);
+                          await loadCart();
+                        }
                       },
                     ),
                   ),
@@ -163,14 +272,12 @@ class _CartScreenState extends State<CartScreen> {
                     const Text(
                       "Total:",
                       style: TextStyle(
-                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
                       "₹${total.toStringAsFixed(0)}",
                       style: TextStyle(
-                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.primary,
                       ),
@@ -183,24 +290,16 @@ class _CartScreenState extends State<CartScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: isPlacingOrder
-                        ? null
-                        : placeOrder,
+                    onPressed: startPaymentFlow,
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
                       theme.colorScheme.primary,
                       padding:
-                      const EdgeInsets.symmetric(
-                          vertical: 14),
+                      const EdgeInsets.symmetric(vertical: 14),
                     ),
-                    child: isPlacingOrder
-                        ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
-                        : const Text(
-                      "Order Now",
-                      style:
-                      TextStyle(color: Colors.white),
+                    child: const Text(
+                      "Pay Now",
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),

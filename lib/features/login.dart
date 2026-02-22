@@ -20,7 +20,7 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
 
   bool isLoading = false;
 
-  final String baseUrl = "http://10.18.46.128:8080";
+  final String baseUrl = "http://10.141.126.128:8080";
 
   @override
   void dispose() {
