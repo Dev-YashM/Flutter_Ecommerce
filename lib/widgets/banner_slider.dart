@@ -18,7 +18,7 @@ class _CoolerImageSliderState extends State<BannerSlider> {
   Timer? _timer;
 
   int _currentPage = 0;
-  final int _initialPage = 1000; // for infinite illusion
+  final int _initialPage = 1000;
 
   @override
   void initState() {
@@ -71,7 +71,6 @@ class _CoolerImageSliderState extends State<BannerSlider> {
               return Container(
                 margin: const EdgeInsets.symmetric(horizontal: 6),
                 decoration: BoxDecoration(
-                  // borderRadius: BorderRadius.circular(18),
                   image: DecorationImage(
                     image: image.startsWith("http")
                         ? NetworkImage(image)
@@ -86,7 +85,6 @@ class _CoolerImageSliderState extends State<BannerSlider> {
 
         const SizedBox(height: 12),
 
-        /// Indicator
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(

@@ -36,7 +36,6 @@ class ProductCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
 
-          /// 🔥 Product Image (Network + Asset Support)
           ClipRRect(
             borderRadius: const BorderRadius.vertical(
               top: Radius.circular(20),
@@ -58,7 +57,6 @@ class ProductCard extends StatelessWidget {
             ),
           ),
 
-          /// 📦 Product Details
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(

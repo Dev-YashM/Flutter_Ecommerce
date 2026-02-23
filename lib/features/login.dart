@@ -133,7 +133,6 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
 
               const SizedBox(height: 40),
 
-              // Mobile Field
               TextField(
                 controller: mobileController,
                 keyboardType: TextInputType.number,
@@ -159,7 +158,6 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
 
               const SizedBox(height: 20),
 
-              // PIN Field
               TextField(
                 controller: pinController,
                 keyboardType: TextInputType.number,

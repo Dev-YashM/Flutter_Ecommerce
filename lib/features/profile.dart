@@ -67,7 +67,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           children: [
 
-            /// 🔥 Profile Header
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 30),
@@ -115,7 +114,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             const SizedBox(height: 25),
 
-            /// 🔥 Profile Details Section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(

@@ -73,7 +73,6 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
           itemBuilder: (context, index) {
             final order = orders[index];
 
-            // Determine card color and status text based on paymentStatus
             Color cardColor = Colors.white;
             String paymentText = "";
 
@@ -100,7 +99,6 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
 
-                    /// 🔥 Title
                     Text(
                       order["coolerTitle"],
                       style: TextStyle(
@@ -112,7 +110,6 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
 
                     const SizedBox(height: 8),
 
-                    /// Rental Duration
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -123,7 +120,6 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
 
                     const SizedBox(height: 6),
 
-                    /// Price
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -137,7 +133,6 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
 
                     const SizedBox(height: 6),
 
-                    /// Booked Date
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -148,7 +143,6 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
 
                     const SizedBox(height: 6),
 
-                    /// Order Status
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -159,7 +153,6 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
 
                     const SizedBox(height: 6),
 
-                    /// Payment Status
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

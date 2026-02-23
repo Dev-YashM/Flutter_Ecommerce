@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CoolerImageSlider extends StatefulWidget {
-  final List<String> images; // can be network or asset
+  final List<String> images;
 
   const CoolerImageSlider({
     super.key,
@@ -51,7 +51,7 @@ class _CoolerImageSliderState extends State<CoolerImageSlider> {
 
         const SizedBox(height: 12),
 
-        // Indicator
+
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(

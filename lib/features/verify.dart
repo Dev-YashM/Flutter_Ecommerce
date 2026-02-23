@@ -31,7 +31,6 @@ class _VerifyMobileScreenState extends State<VerifyMobileScreen> {
     super.dispose();
   }
 
-  // SEND OTP (CALL BACKEND)
   Future<void> submitMobile() async {
     if (mobileController.text.length != 10) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -67,7 +66,6 @@ class _VerifyMobileScreenState extends State<VerifyMobileScreen> {
     }
   }
 
-  // VERIFY OTP (CALL BACKEND)
   Future<void> verifyOtp() async {
     setState(() => isLoading = true);
 
@@ -92,7 +90,6 @@ class _VerifyMobileScreenState extends State<VerifyMobileScreen> {
       await prefs.setString("mobileNumber", mobileNumber);
 
       if (profileComplete == true) {
-        // ✅ User already registered → Go to App
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -101,7 +98,6 @@ class _VerifyMobileScreenState extends State<VerifyMobileScreen> {
           ),
         );
       } else {
-        // ✅ New user → Go to Register Screen
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -120,7 +116,7 @@ class _VerifyMobileScreenState extends State<VerifyMobileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.surface, // Pure white
+      backgroundColor: AppColors.surface,
       appBar: AppBar(
         backgroundColor: AppColors.surface,
         elevation: 0,
@@ -168,7 +164,6 @@ class _VerifyMobileScreenState extends State<VerifyMobileScreen> {
 
               const SizedBox(height: 40),
 
-              // Mobile Field
               TextField(
                 controller: mobileController,
                 keyboardType: TextInputType.number,

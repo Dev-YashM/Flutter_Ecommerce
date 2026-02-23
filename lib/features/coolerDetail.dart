@@ -58,7 +58,6 @@ class _CoolerDetailsScreenState
     }
   }
 
-  /// 🔥 Rental Bottom Sheet
   void showRentalSelector() {
     showModalBottomSheet(
       context: context,
@@ -104,7 +103,6 @@ class _CoolerDetailsScreenState
     );
   }
 
-  /// 🔥 Rental Tile
   Widget rentalOptionTile({
     required String label,
     required dynamic price,
@@ -147,7 +145,7 @@ class _CoolerDetailsScreenState
     );
   }
 
-  /// 🔥 Add To Cart (Persistent + Prevent Duplicate)
+
   Future<void> addToCart({
     required String duration,
     required double selectedPrice,

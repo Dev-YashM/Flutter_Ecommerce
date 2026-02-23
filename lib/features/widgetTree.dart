@@ -28,7 +28,6 @@ class _WidgetTreeState extends State<WidgetTree> {
   void initState() {
     super.initState();
 
-    /// ✅ Now widget.mobileNumber is safe to use
     features = [
       const HomeScreen(),
       ProfileScreen(mobileNumber: widget.mobileNumber),
@@ -39,7 +38,7 @@ class _WidgetTreeState extends State<WidgetTree> {
     setState(() {
       selectedIndex = index;
     });
-    Navigator.pop(context); // close drawer
+    Navigator.pop(context);
   }
 
   @override
@@ -59,11 +58,10 @@ class _WidgetTreeState extends State<WidgetTree> {
         ),
         automaticallyImplyLeading: true,
         iconTheme: const IconThemeData(
-          color: AppColors.surface,   // 🔥 Drawer icon color
+          color: AppColors.surface,
         ),
       ),
 
-      /// 🔥 Drawer Added
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -98,14 +96,12 @@ class _WidgetTreeState extends State<WidgetTree> {
               ),
             ),
 
-            /// 🏠 Home
             ListTile(
               leading: const Icon(Icons.home),
               title: const Text("Home"),
               onTap: () => navigateToIndex(0),
             ),
 
-            /// 👤 Profile
             ListTile(
               leading: const Icon(Icons.person),
               title: const Text("My Profile"),
@@ -114,7 +110,6 @@ class _WidgetTreeState extends State<WidgetTree> {
 
             const Divider(),
 
-            /// 🛒 Cart (To Implement)
             ListTile(
               leading: const Icon(Icons.shopping_cart),
               title: const Text("My Cart"),
@@ -123,7 +118,6 @@ class _WidgetTreeState extends State<WidgetTree> {
               },
             ),
 
-            /// 📦 Orders (To Implement)
             ListTile(
               leading: const Icon(Icons.list_alt),
               title: const Text("My Orders"),
@@ -133,7 +127,6 @@ class _WidgetTreeState extends State<WidgetTree> {
               },
             ),
 
-            /// ❤️ Wishlist
             ListTile(
               leading: const Icon(Icons.favorite),
               title: const Text("Wishlist"),
@@ -147,7 +140,6 @@ class _WidgetTreeState extends State<WidgetTree> {
 
             const Divider(),
 
-            /// ⚙ Settings
             ListTile(
               leading: const Icon(Icons.settings),
               title: const Text("Settings"),
@@ -159,7 +151,6 @@ class _WidgetTreeState extends State<WidgetTree> {
               },
             ),
 
-            /// 🚪 Logout
             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text("Logout"),

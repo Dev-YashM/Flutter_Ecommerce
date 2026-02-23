@@ -11,7 +11,6 @@ class CategorySection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-          /// Title
           const Text(
             "Categories",
             style: TextStyle(
@@ -23,7 +22,6 @@ class CategorySection extends StatelessWidget {
 
           const SizedBox(height: 16),
 
-          /// Category Card
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
             decoration: BoxDecoration(
@@ -45,7 +43,6 @@ class CategorySection extends StatelessWidget {
             child: Row(
               children: [
 
-                /// Icon Circle
                 Container(
                   padding: const EdgeInsets.all(0),
                   decoration: BoxDecoration(
@@ -61,7 +58,6 @@ class CategorySection extends StatelessWidget {
 
                 const SizedBox(width: 16),
 
-                /// Text
                 const Expanded(
                   child: Text(
                     "Rental Coolers",
@@ -73,7 +69,6 @@ class CategorySection extends StatelessWidget {
                   ),
                 ),
 
-                /// Arrow Indicator
                 const Icon(
                   Icons.arrow_forward_ios,
                   size: 16,

@@ -62,7 +62,6 @@ class _CartScreenState extends State<CartScreen> {
     return sum;
   }
 
-  /// STEP 1 - Create Booking
   Future<String?> createBooking(Map<String, dynamic> item) async {
 
     final response = await http.post(
@@ -84,7 +83,6 @@ class _CartScreenState extends State<CartScreen> {
     return null;
   }
 
-  /// STEP 2 - Create Razorpay Order (FIXED URL)
   Future<Map<String, dynamic>?> createRazorpayOrder(String bookingId) async {
     final response = await http.post(
       Uri.parse("$baseUrl/payment/create-order/$bookingId"),
@@ -97,7 +95,6 @@ class _CartScreenState extends State<CartScreen> {
     return null;
   }
 
-  /// STEP 3 - Open Razorpay
   void openRazorpay(String razorpayOrderId, int price) {
     var options = {
       'key': 'rzp_test_SJC89k7q16xRy1',
@@ -112,7 +109,6 @@ class _CartScreenState extends State<CartScreen> {
     _razorpay.open(options);
   }
 
-  /// STEP 4 - Verify Payment (FIXED TO USE REQUEST PARAMS)
   Future<void> verifyPayment(
       String bookingId,
       String paymentId,
@@ -166,7 +162,6 @@ class _CartScreenState extends State<CartScreen> {
 
   void handleExternalWallet(ExternalWalletResponse response) {}
 
-  /// MAIN ORDER FLOW
   Future<void> startPaymentFlow() async {
 
     if (cartItems.isEmpty || mobileNumber.isEmpty) {

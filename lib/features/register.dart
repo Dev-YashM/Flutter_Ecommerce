@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:mahalaxmi_coolers/core/theme/app_colors.dart';
 import 'package:mahalaxmi_coolers/features/widgetTree.dart';
 import 'package:mahalaxmi_coolers/widgets/full_name_logo.dart';
-import 'package:mahalaxmi_coolers/widgets/hero.dart';
 
 class RegisterScreen extends StatefulWidget {
   final String mobileNumber;
@@ -159,7 +158,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 const SizedBox(height: 40),
 
-                /// Mobile (Read Only)
                 TextFormField(
                   initialValue: widget.mobileNumber,
                   readOnly: true,
@@ -168,7 +166,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 const SizedBox(height: 20),
 
-                /// Username
                 TextFormField(
                   controller: usernameController,
                   decoration: _inputDecoration("Username"),
@@ -186,7 +183,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 const SizedBox(height: 20),
 
-                /// Plot No
                 TextFormField(
                   controller: plotController,
                   decoration: _inputDecoration("Plot No"),
@@ -194,7 +190,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 const SizedBox(height: 20),
 
-                /// Lane
                 TextFormField(
                   controller: laneController,
                   decoration: _inputDecoration("Lane / Area"),
@@ -202,9 +197,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 const SizedBox(height: 20),
 
-                /// City
                 DropdownButtonFormField<String>(
-                  value: selectedCity,
+                  initialValue: selectedCity,
                   decoration: _inputDecoration("City"),
                   items: const [
                     DropdownMenuItem(
@@ -219,9 +213,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 const SizedBox(height: 20),
 
-                /// State
                 DropdownButtonFormField<String>(
-                  value: selectedState,
+                  initialValue: selectedState,
                   decoration: _inputDecoration("State"),
                   items: const [
                     DropdownMenuItem(
@@ -236,7 +229,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 const SizedBox(height: 20),
 
-                /// PIN Code
                 TextFormField(
                   controller: pinCodeController,
                   keyboardType: TextInputType.number,
