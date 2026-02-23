@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mahalaxmi_coolers/core/theme/app_colors.dart';
 
 class CategorySection extends StatelessWidget {
   const CategorySection({super.key});
@@ -10,74 +11,26 @@ class CategorySection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          const Text(
-            "Categories",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.5,
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+            width: double.infinity,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.blue.shade400,
-                  Colors.blue.shade600,
-                ],
+              borderRadius: BorderRadius.circular(30),
+              color: AppColors.accent.withOpacity(0.50),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: const Text(
+                "RENTAL COOLERS",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.5,
+                ),
               ),
-              borderRadius: BorderRadius.circular(18),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.blue.shade200.withOpacity(0.6),
-                  blurRadius: 12,
-                  offset: const Offset(0, 6),
-                ),
-              ],
             ),
-            child: Row(
-              children: [
-
-                Container(
-                  padding: const EdgeInsets.all(0),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.ac_unit,
-                    size: 28,
-                    color: Colors.white,
-                  ),
-                ),
-
-                const SizedBox(width: 16),
-
-                const Expanded(
-                  child: Text(
-                    "Rental Coolers",
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-
-                const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 16,
-                  color: Colors.white70,
-                )
-              ],
-            ),
-          ),
-        ],
+          )
+        ]
       ),
     );
   }

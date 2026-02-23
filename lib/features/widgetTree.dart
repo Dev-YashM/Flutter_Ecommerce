@@ -4,6 +4,8 @@ import 'package:mahalaxmi_coolers/features/cart.dart';
 import 'package:mahalaxmi_coolers/features/home.dart';
 import 'package:mahalaxmi_coolers/features/orders.dart';
 import 'package:mahalaxmi_coolers/features/profile.dart';
+import 'package:mahalaxmi_coolers/features/splash.dart';
+import 'package:mahalaxmi_coolers/features/wishList.dart';
 
 class WidgetTree extends StatefulWidget {
   const WidgetTree({
@@ -74,9 +76,7 @@ class _WidgetTreeState extends State<WidgetTree> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.ac_unit,
-                      size: 40,
-                      color: Theme.of(context).colorScheme.surface),
+                  Image.asset('assets/images/darkLogo.png', height: 60, width: 60),
                   const SizedBox(height: 10),
                   Text(
                     widget.title,
@@ -131,18 +131,15 @@ class _WidgetTreeState extends State<WidgetTree> {
               leading: const Icon(Icons.favorite),
               title: const Text("Wishlist"),
               onTap: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Wishlist coming soon")),
-                );
+                Navigator.push(context, MaterialPageRoute(builder: (context) => WishlistScreen(),));
               },
             ),
 
             const Divider(),
 
             ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text("Settings"),
+              leading: const Icon(Icons.contact_support_sharp),
+              title: const Text("Contact Us"),
               onTap: () {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -152,13 +149,10 @@ class _WidgetTreeState extends State<WidgetTree> {
             ),
 
             ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text("Logout"),
+              leading: const Icon(Icons.logout, color: Colors.red,),
+              title: const Text("Logout", style: TextStyle(color: Colors.red),),
               onTap: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Logout logic pending")),
-                );
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SplashScreen(),));
               },
             ),
           ],
