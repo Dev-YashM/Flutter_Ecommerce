@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mahalaxmi_coolers/features/login.dart';
-import 'package:mahalaxmi_coolers/features/verify.dart';
-
 import '../widgets/hero.dart';
 
 class SplashScreen extends StatefulWidget {
