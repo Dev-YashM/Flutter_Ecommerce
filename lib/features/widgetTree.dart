@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mahalaxmi_coolers/core/theme/app_colors.dart';
 import 'package:mahalaxmi_coolers/features/cart.dart';
+import 'package:mahalaxmi_coolers/features/contactUs.dart';
 import 'package:mahalaxmi_coolers/features/home.dart';
 import 'package:mahalaxmi_coolers/features/orders.dart';
 import 'package:mahalaxmi_coolers/features/profile.dart';
@@ -141,10 +142,7 @@ class _WidgetTreeState extends State<WidgetTree> {
               leading: const Icon(Icons.contact_support_sharp),
               title: const Text("Contact Us"),
               onTap: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Settings coming soon")),
-                );
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ContactUsScreen(),));
               },
             ),
 
