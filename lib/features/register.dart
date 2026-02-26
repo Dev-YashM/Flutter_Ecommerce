@@ -26,7 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String selectedCity = "Yavatmal";
   String selectedState = "Maharashtra";
 
-  final String baseUrl = "http://10.141.126.128:8080";
+  final String baseUrl = "https://ecombackend-1-j6ov.onrender.com";
 
   bool isLoading = false;
 

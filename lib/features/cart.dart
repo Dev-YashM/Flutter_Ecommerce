@@ -17,7 +17,7 @@ class _CartScreenState extends State<CartScreen> {
   List<Map<String, dynamic>> cartItems = [];
   late Razorpay _razorpay;
 
-  final String baseUrl = "http://10.141.126.128:8080/api";
+  final String baseUrl = "https://ecombackend-1-j6ov.onrender.com/api";
 
   String mobileNumber = "";
   String currentBookingId = "";

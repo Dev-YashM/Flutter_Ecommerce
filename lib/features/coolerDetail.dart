@@ -25,7 +25,7 @@ class _CoolerDetailsScreenState extends State<CoolerDetailsScreen> {
   bool isLoading = true;
   Map<String, dynamic>? coolerData;
 
-  final String baseUrl = "http://10.141.126.128:8080/api";
+  final String baseUrl = "https://ecombackend-1-j6ov.onrender.com/api";
 
   @override
   void initState() {

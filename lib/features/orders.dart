@@ -28,7 +28,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
     try {
       final response = await http.get(
         Uri.parse(
-          "http://10.141.126.128:8080/api/bookings/user/$mobileNumber",
+          "https://ecombackend-1-j6ov.onrender.com/api/bookings/user/$mobileNumber",
         ),
       );
 
